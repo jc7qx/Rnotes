@@ -1,0 +1,29 @@
+---
+title: "運用ggplot2, ggmap, rgdal處理地圖資料"
+output: html_document
+---
+1. 利用ggmap讀取google地圖
+2. 將資料位置顯示在地圖上
+3. 處理Ersi shpae file 資料
+4. 利用ggplot2畫出資料密度圖
+
+**呼叫以下模組**
+```{r}
+library(ggplot2)
+library(ggmap)
+library(rgdal)
+```
+
+**讀取Google Map(以芝山捷運站為中心)**
+
+```{r, echo=TRUE, message=FALSE}
+mylocation <- "芝山捷運站"
+mylocation <- iconv(mylocation, "big5", "utf8")
+mymap <- get_map(mylocation, maptype="roadmap", zoom=16)
+```
+```{R}
+ggmap(mymap)
+```
+
+
+註：iconv()的功能再處理將字串編碼轉換為utf8
