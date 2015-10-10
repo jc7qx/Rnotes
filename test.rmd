@@ -1,0 +1,46 @@
+---
+title: "用R處理shapefile"
+output: ioslides_presentation
+---
+
+##目的
+- 學習在R中如何處理shapefile，shapefile是由ERIS(Arcgis)公司所開發的開放資料結構描述GIS系統的向量圖形檔，
+- 在此練習中我們利用rgdal模組中的readOGR讀取「鄉鎮界_WGS84.sbp」，再利用ggplot2模組顯示圖形。
+- 同時我們也將練習導入ggmap模組讀取 google map圖形，並將shapefile及googlemap重疊在一起。
+
+##處理步驟
+
+##1.引用模組
+
+1. rgdal
+2. ggplot2
+3. ggmap
+4. sp
+
+```{r, message=FALSE}
+library(rgdal)
+library(ggplot2)
+library(ggmap)
+```
+##2.設定工作目錄與讀取shapefile檔
+```{r}
+setwd("~/desktop/twshpfile/wgs84/")
+twadm<-readOGR(".","鄉鎮界_WGS84")
+twadm1 <- fortify(twadm)
+```
+##3.建立google台灣地圖
+```{r}
+twmap <- get_map("taiwan", zoom=8)
+twmap <- ggmap(twmap)
+```
+##4.重疊台灣地圖及shapefile
+```{r}
+ggtpadmip <- twmap + 
+  geom_polygon(data=twadm1, aes(x=long, y=lat, group=group), color="red", alpha=0) +
+  coord_equal() +
+  theme(legend.position="none", title=element_blank(), axis.text=element_blank())
+```
+##結果
+```{r}
+print(ggtpadmip)
+```
