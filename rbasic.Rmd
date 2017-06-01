@@ -1,0 +1,117 @@
+---
+title: "R Basics"
+author: "鍾健雄"
+date: "2017年6月1日"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R 基本介紹
+
+### R 命令列可以當做計算機
+
+R語言主要用於統計計算，是一套開放式統計工具。啟動R語言命令列介面，可以將它視為一種互動式執行環境，例如可以執行四則運算。
+
+```{r}
+1+1*2/3**2
+```
+
+> 你知道如何得出答案嗎？
+
+### R語言定義變數
+
+```{r}
+x = 10
+x
+class(x)
+```
+
+利用`class(x)`可以知道x的資料類型為**數值**。
+
+### R 基本資料類型
+R語言提供5種基本資料類型，分別為numeric（數值）、Integer（整數）、Complex（複數）、 Logical（邏輯）、 Character（字元），例如
+
+```{r}
+x = 5
+y = 3.14
+z = FALSE
+w = "Hello World"
+```
+
+```{r}
+class(x)
+class(y)
+class(z)
+class(w)
+```
+
+`is.integer(x)`的結果顯示x是數值而非整數
+```{r}
+is.integer(x)
+```
+
+數值型（浮點數）資料可以利用`as.integer()`函數轉換為整數
+```{r}
+u = as.integer(x)
+is.integer(u)
+```
+
+注意以下運算
+```{r}
+as.integer(3)
+as.integer(3.14)
+as.integer(TRUE)
+as.integer(FALSE)
+```
+
+### 邏輯運算
+
+```{r}
+l = 3 > 4
+l
+class(l)
+```
+
+```{r}
+t = TRUE
+f = FALSE
+t & f #AND
+t | f #OR
+!t #NOT
+```
+
+### 字串運算
+```{r}
+a = "jason"
+b = "chung"
+paste(a,b)
+sprintf("Hello %s, Give me %d", "Jason", 5)
+substr("This is a sunny day.", start=9, stop=19)
+sub("sunny", "rainy", "This is a sunny day.")
+```
+
+
+
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
