@@ -301,6 +301,70 @@ $ score: num 67 56 87 91
 > ncol(df)
 [1] 2
 ```
-Let’s understand the code above. df is the name of data frame. dim() returns the dimension of data frame as 4 rows and 2 columns. str() returns the structure of a data frame i.e. the list of variables stored in the data frame. nrow() and ncol() return the number of rows and number of columns in a data set respectively.
+##Big mart sales analysis
 
-Here you see “name” is a factor variable and “score” is numeric. In data science, a variable can be categorized into two types: Continuous and Categorical.
+###設定資料檔案路徑，讀取檔案
+
+```{r}
+path = "/Users/mac/desktop/rtest/bigmartsales"
+setwd(path)
+train <- read.csv("BMS-Train.csv")
+test <- read.csv("BMS-Test.csv")
+dim(train)
+dim(test)
+```
+訓練檔中有8523筆資料，共有12個資料欄位，測試檔中5681筆資料，有11個資料欄位
+
+```{r}
+str(train) #資料欄位分析
+```
+```{r}
+table(is.na(train))   #資料表中N/A值的數量
+colSums(is.na(train)) #每個資料欄中N/A總和
+```
+```{r}
+summary(train) #每個資料欄項目的統計概況
+```
+###graphical display of data
+
+###散佈圖
+```{r}
+library(ggplot2)
+ggplot(train, aes(x= Item_Visibility, y = Item_Outlet_Sales)) + geom_point(size = 1.5, color="navy") + xlab("Item Visibility") + ylab("Item Outlet Sales") + ggtitle("Item Visibility vs Item Outlet Sales")
+```
+
+###長條圖
+```{r}
+ggplot(train, aes(Outlet_Identifier, Item_Outlet_Sales)) + geom_bar(stat = "identity", color = "purple") +theme(axis.text.x = element_text(angle = 60, vjust = 0.5, color = "black"))  + ggtitle("Outlets vs Total Sales") 
+```
+```{r}
+ggplot(train, aes(Item_Type, Item_Outlet_Sales)) + geom_bar( stat = "identity") +theme(axis.text.x = element_text(angle = 70, vjust = 0.5, color = "navy")) + xlab("Item Type") + ylab("Item Outlet Sales")+ggtitle("Item Type vs Sales")
+```
+
+###盒圖
+
+```{r}
+ggplot(train, aes(Item_Type, Item_MRP)) +geom_boxplot() +ggtitle("Box Plot") + theme(axis.text.x = element_text(angle = 70, vjust = 0.5, color = "red")) + xlab("Item Type") + ylab("Item MRP") + ggtitle("Item Type vs Item MRP")
+```
+
+###Missing Value處理
+
+```{r}
+dim(train)
+dim(test)
+colnames(train)
+colnames(test)
+test$Item_Outlet_Sales <-1
+combi <- rbind(train, test)
+combi$Item_Weight[is.na(combi$Item_Weight)] <- median(combi$Item_Weight, na.rm = TRUE)
+table(is.na(combi$Item_Weight))
+combi$Item_Visibility <- ifelse(combi$Item_Visibility == 0, median(combi$Item_Visibility), combi$Item_Visibility)
+```
+
+```{r}
+levels(combi$Outlet_Size)[1] <- "Other"
+library(plyr)
+combi$Item_Fat_Content <- revalue(combi$Item_Fat_Content, c("LF" = "Low Fat", "reg" = "Regular"))
+combi$Item_Fat_Content <- revalue(combi$Item_Fat_Content, c("low fat" = "Low Fat"))
+table(combi$Item_Fat_Content)
+```
